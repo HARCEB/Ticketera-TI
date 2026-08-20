@@ -1,220 +1,211 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma de Gestión y Soporte TI</title>
+
+  <!-- Tailwind CSS & Librerías -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-
+  
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f4f7f9;
-    }
-
-    /* Un gris ligeramente más frío y profesional */
-
-    /* Scrollbar personalizada para un look premium */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
+    body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
+    
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
     /* Loader moderno */
     .loader {
-      border: 3px solid rgba(59, 130, 246, 0.1);
-      border-top-color: #3b82f6;
+      border: 3px solid rgba(59, 130, 246, 0.15);
+      border-top-color: #2563eb;
       border-radius: 50%;
-      animation: spin 1s linear infinite;
+      animation: spin 0.8s linear infinite;
     }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Daterangepicker Styling - Premium */
-    .daterangepicker {
-      font-family: 'Inter', sans-serif;
-      border-radius: 16px;
+    /* Daterangepicker Styling */
+    .daterangepicker { 
+      font-family: 'Inter', sans-serif; 
+      border-radius: 16px; 
       border: 1px solid #e2e8f0;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       padding: 8px;
     }
+    .daterangepicker .ranges li { border-radius: 8px; margin-bottom: 4px; font-weight: 500; transition: all 0.2s; }
+    .daterangepicker .ranges li:hover { background-color: #f1f5f9; }
+    .daterangepicker .ranges li.active { background-color: #0f172a; color: white; }
+    .daterangepicker td.active, .daterangepicker td.active:hover { background-color: #0f172a; border-radius: 8px; }
+    .daterangepicker td { border-radius: 8px; transition: all 0.2s; }
+    
+    /* Animaciones */
+    .fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .scale-up { animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleUp { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-    .daterangepicker .ranges li {
-      border-radius: 8px;
-      margin-bottom: 4px;
-      font-weight: 500;
-      transition: all 0.2s;
+    /* Pulso para SLA vencido */
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
     }
-
-    .daterangepicker .ranges li:hover {
-      background-color: #f1f5f9;
-    }
-
-    .daterangepicker .ranges li.active {
-      background-color: #0f172a;
-      color: white;
-    }
-
-    .daterangepicker td.active,
-    .daterangepicker td.active:hover {
-      background-color: #0f172a;
-      border-radius: 8px;
-    }
-
-    .daterangepicker td {
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-
-    /* Animaciones Generales */
-    .fade-in {
-      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .scale-up {
-      animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes scaleUp {
-      from {
-        opacity: 0;
-        transform: scale(0.95) translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    /* Glassmorphism sutil */
-    .glass {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
+    .sla-vencido-pulse { animation: pulse-subtle 2s infinite; }
   </style>
 </head>
-
 <body class="text-slate-800 antialiased min-h-screen flex flex-col">
 
   <!-- CAPA DE CARGA GLOBAL -->
-  <div id="loading"
-    class="fixed inset-0 bg-slate-900/20 backdrop-blur-md flex items-center justify-center z-[100] fade-in">
-    <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full mx-4 scale-up">
+  <div id="loading" class="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-[100] fade-in">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full mx-4 scale-up border border-slate-100">
       <div class="loader w-12 h-12 mb-4"></div>
       <h3 class="text-lg font-bold text-slate-800">Sincronizando Plataforma</h3>
       <p id="loading-text" class="mt-1 text-slate-500 text-sm text-center">Conectando con la base de datos...</p>
     </div>
   </div>
 
-  <!-- MODAL DE TICKETS -->
-  <div id="ticketModal"
-    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4 transition-opacity">
-    <div class="bg-white rounded-2xl w-full max-w-xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden scale-up">
-      <!-- Header Modal -->
-      <div class="flex justify-between items-center px-6 py-5 border-b border-slate-100 bg-slate-50/50">
-        <div>
-          <div class="flex items-center gap-2 mb-1">
-            <span
-              class="px-2.5 py-1 bg-slate-200 text-slate-700 text-[10px] font-bold uppercase tracking-widest rounded-md">TICKET</span>
-            <h2 class="text-xl font-bold text-slate-900" id="modalId"></h2>
-          </div>
-          <p class="text-sm text-slate-500 flex items-center gap-1.5"><i data-lucide="user"
-              class="w-4 h-4 text-slate-400"></i> <span id="modalNombre" class="font-medium"></span></p>
+  <!-- MODAL LIGHTBOX PARA IMÁGENES / EVIDENCIAS -->
+  <div id="lightboxModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-[90] p-4 transition-opacity fade-in" onclick="closeLightbox()">
+    <div class="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+      <div class="w-full flex justify-between items-center text-white mb-3 px-2">
+        <div class="flex items-center gap-2">
+          <i data-lucide="image" class="w-5 h-5 text-blue-400"></i>
+          <span id="lightboxTitle" class="text-sm font-semibold tracking-wide">Evidencia Adjunta</span>
         </div>
-        <button onclick="closeModal()"
-          class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors"><i
-            data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="flex items-center gap-3">
+          <a id="lightboxDriveLink" href="#" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold backdrop-blur transition-all">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Abrir en Drive
+          </a>
+          <button onclick="closeLightbox()" class="text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
       </div>
+      <div class="w-full flex items-center justify-center overflow-hidden rounded-2xl bg-slate-900 border border-white/10 shadow-2xl h-[78vh]">
+        <iframe id="lightboxIframe" src="about:blank" class="w-full h-full border-0 rounded-xl bg-white" allow="autoplay"></iframe>
+      </div>
+    </div>
+  </div>
 
-      <!-- Body Modal -->
-      <div class="p-6 overflow-y-auto flex-grow">
-        <div class="mb-5">
-          <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Descripción del
-            Caso</label>
-          <div id="modalDesc"
-            class="bg-slate-50 border border-slate-100 p-4 rounded-xl text-slate-700 text-sm max-h-40 overflow-y-auto whitespace-pre-wrap leading-relaxed shadow-inner">
+  <!-- MODAL PRINCIPAL DE ACCIÓN Y DETALLE DEL TICKET -->
+  <div id="ticketModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-3 md:p-6 transition-opacity">
+    <div class="bg-white rounded-2xl w-full max-w-3xl shadow-2xl max-h-[92vh] flex flex-col overflow-hidden scale-up border border-slate-100">
+      
+      <!-- Header Modal -->
+      <div class="flex justify-between items-center px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+        <div>
+          <div class="flex items-center gap-2.5 mb-1">
+            <span class="px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-md">TICKET</span>
+            <h2 class="text-xl font-extrabold text-slate-900" id="modalId"></h2>
+            <span id="modalNivelHeaderBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold border"></span>
+          </div>
+          <p class="text-xs text-slate-500 flex items-center gap-1.5">
+            <i data-lucide="user" class="w-3.5 h-3.5 text-slate-400"></i> Solicitante: <span id="modalNombre" class="font-semibold text-slate-700"></span>
+          </p>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-xl transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      
+      <!-- Body Modal con Scroll -->
+      <div class="p-6 overflow-y-auto flex-grow space-y-6">
+        
+        <!-- Tarjeta de Resumen SLA y Tiempo -->
+        <div id="modalSlaContainer" class="p-4 rounded-xl border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div class="flex items-center gap-3">
+            <div id="modalSlaIconContainer" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+              <i id="modalSlaIcon" data-lucide="clock" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Estado de SLA</p>
+              <h4 id="modalSlaTitle" class="text-sm font-bold text-slate-800">Calculando...</h4>
+            </div>
+          </div>
+          <div class="text-left sm:text-right">
+            <span id="modalSlaBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border"></span>
+            <p id="modalSlaDetails" class="text-[11px] text-slate-500 mt-1 font-medium"></p>
           </div>
         </div>
 
-        <div class="mb-5">
-          <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Estado del
-            Ticket</label>
-          <div class="relative">
-            <select id="modalStatus" onchange="toggleSolucionBox()"
-              class="w-full appearance-none border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 font-medium bg-white transition-all cursor-pointer shadow-sm">
-              <option value="Pendiente">Pendiente</option>
-              <option value="En Proceso">En Proceso</option>
-              <option value="Resuelto">Resuelto</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
-              <i data-lucide="chevron-down" class="w-4 h-4"></i>
+        <!-- Descripción del Caso -->
+        <div>
+          <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Descripción del Requerimiento</label>
+          <div id="modalDesc" class="bg-slate-50 border border-slate-200/70 p-4 rounded-xl text-slate-700 text-sm max-h-36 overflow-y-auto whitespace-pre-wrap leading-relaxed shadow-inner"></div>
+        </div>
+
+        <!-- EVIDENCIAS ADJUNTAS (Google Drive) -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="paperclip" class="w-3.5 h-3.5 text-blue-500"></i> Evidencias y Capturas (Google Drive)
+            </label>
+            <span id="modalEvidenciasCount" class="text-xs text-slate-400 font-medium"></span>
+          </div>
+          <div id="modalEvidenciasList" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <!-- Renderizado dinámico de miniaturas -->
+          </div>
+        </div>
+
+        <!-- Grid de Estado y Nivel de Caso -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Estado del Ticket</label>
+            <div class="relative">
+              <select id="modalStatus" onchange="toggleSolucionBox()" class="w-full appearance-none border border-slate-200 rounded-xl px-4 py-2.5 text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 font-semibold bg-white transition-all cursor-pointer shadow-sm text-sm">
+                <option value="Pendiente">Pendiente</option>
+                <option value="En Proceso">En Proceso</option>
+                <option value="Resuelto">Resuelto</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Nivel de Caso / Prioridad</label>
+            <div class="relative">
+              <select id="modalNivelCaso" class="w-full appearance-none border border-slate-200 rounded-xl px-4 py-2.5 text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 font-semibold bg-white transition-all cursor-pointer shadow-sm text-sm">
+                <option value="Bajo">Bajo (SLA 48h)</option>
+                <option value="Medio">Medio (SLA 24h)</option>
+                <option value="Crítico">Crítico (SLA 4h)</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </div>
             </div>
           </div>
         </div>
 
-        <div
-          class="mb-5 flex items-center justify-between bg-slate-50 border border-slate-100 p-4 rounded-xl shadow-inner">
+        <!-- Cambio de Equipo Switch -->
+        <div class="flex items-center justify-between bg-slate-50 border border-slate-200/70 p-4 rounded-xl">
           <div>
-            <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1">Cambio de
-              Equipo</label>
-            <p class="text-xs text-slate-500">Marcar si se requirió cambiar o reemplazar un equipo.</p>
+            <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-0.5">Cambio o Reemplazo de Equipo</label>
+            <p class="text-xs text-slate-500">Activar si se requirió sustitución de hardware / laptop.</p>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="modalCambioEquipo" class="sr-only peer" onchange="toggleEquipoAveriado()">
-            <div
-              class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-rose-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500">
-            </div>
+            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-rose-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
           </label>
         </div>
 
-        <div id="equipoAveriadoContainer"
-          class="mb-5 hidden fade-in bg-slate-50 border border-slate-100 p-4 rounded-xl shadow-inner">
-          <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-2">Seleccionar Equipo
-            Averiado</label>
+        <!-- Selector Equipo Averiado -->
+        <div id="equipoAveriadoContainer" class="hidden fade-in bg-rose-50/50 border border-rose-100 p-4 rounded-xl">
+          <label class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block mb-2">Seleccionar Modelo Averiado</label>
           <div class="relative">
-            <select id="modalEquipoAveriado"
-              class="w-full appearance-none border border-slate-200 rounded-xl px-4 py-2.5 text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 font-medium bg-white transition-all cursor-pointer shadow-sm">
+            <select id="modalEquipoAveriado" class="w-full appearance-none border border-rose-200 rounded-xl px-4 py-2.5 text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 font-medium bg-white transition-all cursor-pointer shadow-sm text-sm">
               <option value="">Seleccione un modelo...</option>
               <option value="Lenovo ideapad 5">Lenovo ideapad 5</option>
               <option value="Lenovo ThinkBook 14">Lenovo ThinkBook 14</option>
@@ -246,54 +237,103 @@
           </div>
         </div>
 
-        <div id="solucionContainer" class="mb-2 hidden fade-in">
+        <!-- RESOLUCIÓN Y DETALLES (Visible al marcar Resuelto) -->
+        <div id="solucionContainer" class="hidden fade-in">
           <label class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-            <i data-lucide="check-circle-2" class="w-4 h-4"></i> Resolución y Detalles
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i> Resolución Final y Cierre
           </label>
-          <textarea id="modalSolucion" rows="3" placeholder="Documenta cómo se resolvió este incidente..."
-            class="w-full border border-emerald-200 bg-emerald-50/30 rounded-xl p-4 text-sm text-slate-700 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none shadow-sm transition-all"></textarea>
+          <textarea id="modalSolucion" rows="3" placeholder="Documenta cómo se resolvió este incidente..." class="w-full border border-emerald-200 bg-emerald-50/30 rounded-xl p-3.5 text-sm text-slate-700 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none shadow-sm transition-all"></textarea>
         </div>
+
+        <!-- HISTORIAL DE COMENTARIOS Y BITÁCORA -->
+        <div class="border-t border-slate-100 pt-5">
+          <div class="flex items-center justify-between mb-3">
+            <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="message-square" class="w-4 h-4 text-blue-600"></i> Bitácora de Seguimiento & Notas
+            </label>
+            <span id="modalComentariosCount" class="text-xs text-slate-400 font-medium">0 comentarios</span>
+          </div>
+
+          <!-- Timeline de Comentarios Previos -->
+          <div id="modalComentariosList" class="space-y-2.5 max-h-44 overflow-y-auto mb-3 pr-1">
+            <!-- Renderizado dinámico de comentarios -->
+          </div>
+
+          <!-- Formulario Agregar Nuevo Comentario -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3">
+            <div class="flex gap-2 mb-2">
+              <input type="text" id="modalComentarioAutor" value="Cristian Apaza" placeholder="Nombre técnico..." class="w-1/3 text-xs bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 text-slate-700 font-medium">
+              <p class="text-[11px] text-slate-400 flex items-center">Registrar avance o comentario de estado:</p>
+            </div>
+            <textarea id="modalNuevoComentario" rows="2" placeholder="Escribe un avance (ej: Se solicitó repuesto de pantalla, en espera de proveedor)..." class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 resize-none"></textarea>
+          </div>
+        </div>
+
       </div>
 
       <!-- Footer Modal -->
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
-        <button onclick="closeModal()"
-          class="px-5 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm">Cancelar</button>
-        <button onclick="saveTicket()"
-          class="flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-semibold shadow-lg shadow-slate-900/20 transition-all transform hover:-translate-y-0.5">
-          Guardar Cambios <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </button>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
+        <span class="text-xs text-slate-400 flex items-center gap-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i> Alertas enviadas a capaza@buk.pe
+        </span>
+        <div class="flex gap-2.5">
+          <button onclick="closeModal()" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-sm font-semibold hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm">
+            Cancelar
+          </button>
+          <button onclick="saveTicket()" class="flex items-center gap-2 px-5 py-2 bg-slate-900 text-white rounded-xl text-sm hover:bg-slate-800 font-semibold shadow-lg shadow-slate-900/15 transition-all transform hover:-translate-y-0.5">
+            Guardar Cambios <i data-lucide="check" class="w-4 h-4"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- NAVBAR PREMIUM -->
+  <!-- NAVBAR SUPERIOR -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-    <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
+    <div class="max-w-[1440px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <div
-          class="w-10 h-10 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl flex items-center justify-center shadow-lg shadow-slate-900/20 text-white transform hover:scale-105 transition-transform cursor-pointer">
-          <i data-lucide="monitor-dot" class="w-5 h-5"></i>
+        <div class="w-11 h-11 bg-gradient-to-br from-slate-800 to-slate-950 rounded-xl flex items-center justify-center shadow-lg shadow-slate-900/20 text-white transform hover:scale-105 transition-transform cursor-pointer">
+          <i data-lucide="monitor-dot" class="w-6 h-6"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Soporte IT Platform</h1>
-          <p class="text-xs text-slate-500 font-medium mt-0.5">Gestión centralizada de incidencias</p>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Soporte IT Platform</h1>
+            <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-md border border-blue-200">SLA & Evidencias</span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium mt-0.5">Gestión centralizada de incidencias y hardware</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
-        <!-- Filtro de Fecha -->
-        <div
-          class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 hover:bg-slate-100 transition-colors cursor-pointer group">
-          <i data-lucide="calendar" class="text-slate-400 group-hover:text-slate-600 transition-colors w-4 h-4"></i>
-          <input type="text" id="reportrange" placeholder="Filtro Histórico..."
-            class="bg-transparent text-sm text-slate-700 font-semibold focus:outline-none cursor-pointer w-[210px]"
-            readonly>
+        <!-- Filtro SLA -->
+        <div class="hidden lg:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 hover:bg-slate-100 transition-colors cursor-pointer group">
+          <i data-lucide="clock" class="text-slate-400 group-hover:text-slate-600 transition-colors w-4 h-4"></i>
+          <select id="filterSLA" onchange="applyFilter()" class="bg-transparent text-xs text-slate-700 font-semibold focus:outline-none cursor-pointer">
+            <option value="todos">SLA: Todos</option>
+            <option value="vencidos">🔴 Vencidos</option>
+            <option value="por_vencer">🟡 Por Vencer</option>
+            <option value="en_tiempo">🟢 En Tiempo</option>
+          </select>
         </div>
 
+        <!-- Filtro Cambio de Máquina -->
+        <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 hover:bg-slate-100 transition-colors cursor-pointer group">
+          <i data-lucide="monitor-up" class="text-slate-400 group-hover:text-slate-600 transition-colors w-4 h-4"></i>
+          <select id="filterCambioEquipo" onchange="applyFilter()" class="bg-transparent text-xs text-slate-700 font-semibold focus:outline-none cursor-pointer">
+            <option value="todos">Hardware: Todos</option>
+            <option value="si">Con Cambio Eq.</option>
+            <option value="no">Sin Cambio</option>
+          </select>
+        </div>
+
+        <!-- Filtro de Fecha -->
+        <div class="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 hover:bg-slate-100 transition-colors cursor-pointer group">
+          <i data-lucide="calendar" class="text-slate-400 group-hover:text-slate-600 transition-colors w-4 h-4"></i>
+          <input type="text" id="reportrange" placeholder="Rango de fechas..." class="bg-transparent text-xs text-slate-700 font-semibold focus:outline-none cursor-pointer w-[190px]" readonly>
+        </div>
+        
         <!-- Botón Actualizar -->
-        <button onclick="fetchData()"
-          class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 rounded-xl text-sm font-semibold transition-all shadow-sm">
+        <button onclick="fetchData()" class="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 text-slate-700 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 rounded-xl text-xs font-bold transition-all shadow-sm">
           <i data-lucide="refresh-cw" class="w-4 h-4"></i> <span class="hidden sm:inline">Sincronizar</span>
         </button>
       </div>
@@ -301,128 +341,132 @@
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="flex-grow p-4 md:p-8 max-w-[1400px] mx-auto w-full">
+  <main class="flex-grow p-4 md:p-8 max-w-[1440px] mx-auto w-full">
+    
+    <!-- GRID DE KPIS SUPERIORES -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      
+      <!-- KPI 1: Total -->
+      <div class="bg-white p-5 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25 shrink-0">
+          <i data-lucide="layers" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <p class="text-xs text-slate-500 font-medium mb-0.5">Volumen Total</p>
+          <h3 id="stat-total" class="text-2xl font-extrabold text-slate-900 tracking-tight">-</h3>
+        </div>
+      </div>
 
-    <!-- KPIs -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
-      <!-- KPI 1 -->
-      <div
-        class="bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-default">
-        <div
-          class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-          <i data-lucide="layers" class="w-6 h-6"></i>
+      <!-- KPI 2: Resueltos -->
+      <div class="bg-white p-5 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/25 shrink-0">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
         </div>
         <div>
-          <p class="text-sm text-slate-500 font-medium mb-1">Volumen Total</p>
-          <h3 id="stat-total" class="text-3xl font-bold text-slate-900 tracking-tight">-</h3>
+          <p class="text-xs text-slate-500 font-medium mb-0.5">Resueltos</p>
+          <h3 id="stat-resueltos" class="text-2xl font-extrabold text-emerald-600 tracking-tight">-</h3>
         </div>
       </div>
-      <!-- KPI 2 -->
-      <div
-        class="bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-default">
-        <div
-          class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
-          <i data-lucide="check-circle" class="w-6 h-6"></i>
+
+      <!-- KPI 3: Cumplimiento SLA -->
+      <div class="bg-white p-5 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-default">
+        <div id="stat-sla-icon-box" class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/25 shrink-0">
+          <i data-lucide="timer" class="w-5 h-5"></i>
         </div>
         <div>
-          <p class="text-sm text-slate-500 font-medium mb-1">Tickets Resueltos</p>
-          <h3 id="stat-resueltos" class="text-3xl font-bold text-slate-900 tracking-tight">-</h3>
+          <p class="text-xs text-slate-500 font-medium mb-0.5">Cumplimiento SLA</p>
+          <h3 id="stat-sla-compliance" class="text-2xl font-extrabold text-indigo-600 tracking-tight">-%</h3>
         </div>
       </div>
-      <!-- KPI 3 -->
-      <div
-        class="bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-default">
-        <div
-          class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-violet-500/30">
-          <i data-lucide="activity" class="w-6 h-6"></i>
+
+      <!-- KPI 4: En Espera / Pendientes -->
+      <div class="bg-white p-5 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white shadow-md shadow-orange-500/25 shrink-0">
+          <i data-lucide="clock" class="w-5 h-5"></i>
         </div>
         <div>
-          <p class="text-sm text-slate-500 font-medium mb-1">Tasa de Efectividad</p>
-          <h3 id="stat-efectividad" class="text-3xl font-bold text-violet-600 tracking-tight">-%</h3>
+          <p class="text-xs text-slate-500 font-medium mb-0.5">En Proceso / Espera</p>
+          <h3 id="stat-pendientes" class="text-2xl font-extrabold text-orange-600 tracking-tight">-</h3>
         </div>
       </div>
-      <!-- KPI 4 -->
-      <div
-        class="bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-default">
-        <div
-          class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
-          <i data-lucide="clock" class="w-6 h-6"></i>
-        </div>
-        <div>
-          <p class="text-sm text-slate-500 font-medium mb-1">En Espera</p>
-          <h3 id="stat-pendientes" class="text-3xl font-bold text-orange-600 tracking-tight">-</h3>
-        </div>
-      </div>
+
       <!-- KPI 5: Cambio de Equipo -->
-      <div
-        class="bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-default sm:col-span-2 lg:col-span-1">
-        <div
-          class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-white shadow-lg shadow-rose-500/30">
-          <i data-lucide="monitor-up" class="w-6 h-6"></i>
+      <div class="bg-white p-5 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-default sm:col-span-2 lg:col-span-1">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-white shadow-md shadow-rose-500/25 shrink-0">
+          <i data-lucide="monitor-up" class="w-5 h-5"></i>
         </div>
         <div>
-          <p class="text-sm text-slate-500 font-medium mb-1">Cambios Eq.</p>
-          <h3 id="stat-cambios-equipo" class="text-3xl font-bold text-rose-600 tracking-tight">-</h3>
+          <p class="text-xs text-slate-500 font-medium mb-0.5">Cambios de Equipo</p>
+          <h3 id="stat-cambios-equipo" class="text-2xl font-extrabold text-rose-600 tracking-tight">-</h3>
         </div>
       </div>
     </div>
 
     <!-- CHARTS GRID -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-      <div
-        class="lg:col-span-2 bg-white p-7 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-base font-bold text-slate-900">Actividad de Soporte</h3>
-          <span class="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full">Histórico</span>
+      <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Actividad y Tendencia de Tickets</h3>
+            <p class="text-xs text-slate-500">Histórico de tickets generados en el tiempo</p>
+          </div>
+          <span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full">Histórico</span>
         </div>
-        <div class="h-72 relative w-full"><canvas id="trendChart"></canvas></div>
+        <div class="h-64 relative w-full"><canvas id="trendChart"></canvas></div>
       </div>
-      <div
-        class="bg-white p-7 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col">
-        <h3 class="text-base font-bold text-slate-900 mb-2">Distribución de Estados</h3>
-        <p class="text-xs text-slate-500 mb-6">Proporción de tickets según estado actual</p>
+      
+      <div class="bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col">
+        <h3 class="text-sm font-bold text-slate-900 mb-1">Distribución de Estados</h3>
+        <p class="text-xs text-slate-500 mb-4">Proporción según estado actual</p>
         <div class="flex-grow flex items-center justify-center w-full">
-          <div class="w-full max-w-[240px] relative"><canvas id="statusChart"></canvas></div>
+          <div class="w-full max-w-[220px] relative"><canvas id="statusChart"></canvas></div>
         </div>
       </div>
     </div>
 
-    <!-- CATEGORY CHART -->
-    <div class="bg-white p-7 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 mb-8">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <h3 class="text-base font-bold text-slate-900">Demanda por Categorías</h3>
-          <p class="text-xs text-slate-500 mt-1">Sistemas y módulos con más incidencias reportadas</p>
+    <!-- CATEGORIES & PRIORITY GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <!-- CATEGORY CHART -->
+      <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Demanda por Categorías</h3>
+            <p class="text-xs text-slate-500">Sistemas y módulos con mayor volumen de solicitudes</p>
+          </div>
+        </div>
+        <div class="h-64 relative w-full"><canvas id="categoryChart"></canvas></div>
+      </div>
+      
+      <!-- NIVEL DE CASO & SLA CHART -->
+      <div class="bg-white p-6 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col">
+        <h3 class="text-sm font-bold text-slate-900 mb-1">Nivel de Gravedad (SLA)</h3>
+        <p class="text-xs text-slate-500 mb-4">Distribución de criticidad de incidentes</p>
+        <div class="flex-grow flex items-center justify-center w-full">
+          <div class="w-full max-w-[220px] relative"><canvas id="nivelCasoChart"></canvas></div>
         </div>
       </div>
-      <div class="h-80 relative w-full"><canvas id="categoryChart"></canvas></div>
     </div>
 
-    <!-- DATA TABLE -->
-    <div
-      class="bg-white rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 overflow-hidden mb-10">
-
+    <!-- DATA TABLE: DIRECTORIO DE TICKETS -->
+    <div class="bg-white rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] border border-slate-100 overflow-hidden mb-10">
+      
       <!-- Table Header & Controls -->
-      <div
-        class="p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white">
+      <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white">
         <div>
-          <h3 class="text-base font-bold text-slate-900">Directorio de Tickets</h3>
-          <p class="text-xs text-slate-500 mt-1">Listado de los últimos registros procesados</p>
+          <h3 class="text-base font-bold text-slate-900">Directorio de Tickets de Soporte</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Seguimiento en tiempo real, SLA y evidencias adjuntas</p>
         </div>
-
+        
         <div class="flex items-center gap-3 w-full md:w-auto">
           <div class="relative w-full md:w-80 group">
-            <div
-              class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
               <i data-lucide="search" class="w-4 h-4"></i>
             </div>
-            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar ID, usuario, equipo..."
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all">
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar ID, solicitante, equipo..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all font-medium">
           </div>
-
-          <button onclick="exportToCSV()"
-            class="flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-sm font-semibold transition-all shadow-md shadow-slate-900/10 whitespace-nowrap">
-            <i data-lucide="download" class="w-4 h-4"></i> <span class="hidden sm:inline">Exportar</span>
+          
+          <button onclick="exportToCSV()" class="flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition-all shadow-md shadow-slate-900/10 whitespace-nowrap">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Exportar</span>
           </button>
         </div>
       </div>
@@ -430,18 +474,19 @@
       <!-- Table Content -->
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse" id="mainTable">
-          <thead class="bg-slate-50/80 text-slate-500 border-b border-slate-200">
+          <thead class="bg-slate-50/80 text-slate-500 border-b border-slate-200 text-[10px] font-bold uppercase tracking-wider">
             <tr>
-              <th class="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider">ID Ticket</th>
-              <th class="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider">Solicitante</th>
-              <th class="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider">Categoría</th>
-              <th class="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider">Prioridad/Tipo</th>
-              <th class="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider">Status</th>
-              <th class="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider w-1/4">Síntesis</th>
-              <th class="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider text-right">Acción</th>
+              <th class="px-6 py-3.5">ID Ticket</th>
+              <th class="px-6 py-3.5">Solicitante</th>
+              <th class="px-6 py-3.5">Categoría / Tipo</th>
+              <th class="px-6 py-3.5">Estado</th>
+              <th class="px-6 py-3.5">SLA & Tiempo</th>
+              <th class="px-6 py-3.5">Nivel</th>
+              <th class="px-6 py-3.5">Evidencias</th>
+              <th class="px-6 py-3.5 text-right">Acción</th>
             </tr>
           </thead>
-          <tbody id="ticketList" class="divide-y divide-slate-100 bg-white"></tbody>
+          <tbody id="ticketList" class="divide-y divide-slate-100 bg-white text-xs"></tbody>
         </table>
       </div>
     </div>
@@ -450,87 +495,189 @@
   <script>
     // Inicialización de iconos
     lucide.createIcons();
-
+    
     // Variables globales
-    let barChart, statusChart, trendChart;
-    let allTickets = [];
+    let barChart, statusChart, trendChart, nivelCasoChart;
+    let allTickets = []; 
     let filterStart = null;
     let filterEnd = null;
-    let currentDisplayedTickets = [];
+    let currentDisplayedTickets = []; 
 
     // Configuración general de Chart.js
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.color = '#64748b';
     Chart.defaults.scale.grid.color = '#f1f5f9';
 
-    $(function () {
+    // Reglas de SLA en Horas
+    const SLA_LIMITS = {
+      'critico': 4,
+      'medio': 24,
+      'bajo': 48
+    };
+
+    $(function() {
       // Daterangepicker config
       $('#reportrange').daterangepicker({
-        autoUpdateInput: false,
+        autoUpdateInput: false, 
         opens: 'left',
         drops: 'down',
-        ranges: {
-          'Hoy': [moment(), moment()],
-          'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
-          'Este Mes': [moment().startOf('month'), moment().endOf('month')]
+        ranges: { 
+          'Hoy': [moment(), moment()], 
+          'Últimos 7 Días': [moment().subtract(6, 'days'), moment()], 
+          'Este Mes': [moment().startOf('month'), moment().endOf('month')] 
         },
-        locale: {
-          format: 'DD/MM/YYYY',
-          applyLabel: "Aplicar",
-          cancelLabel: "Limpiar",
-          customRangeLabel: "Personalizado",
-          daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-          monthNames: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-          firstDay: 1
+        locale: { 
+          format: 'DD/MM/YYYY', 
+          applyLabel: "Aplicar", 
+          cancelLabel: "Limpiar", 
+          customRangeLabel: "Personalizado", 
+          daysOfWeek: ["Do","Lu","Ma","Mi","Ju","Vi","Sa"], 
+          monthNames: ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"], 
+          firstDay: 1 
         }
       });
 
-      $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+      $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
         $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
         filterStart = picker.startDate.startOf('day').toDate();
         filterEnd = picker.endDate.endOf('day').toDate();
         applyFilter();
       });
 
-      $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
+      $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
         $(this).val(''); filterStart = null; filterEnd = null; applyFilter();
       });
+
+      // Carga inicial de datos
+      fetchData();
     });
 
+    /**
+     * Calcula métricas de SLA para un ticket dado.
+     */
+    function calcularSLA(ticket) {
+      const nivelNorm = (ticket.nivelCaso || 'Bajo').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const limiteHoras = SLA_LIMITS[nivelNorm] || 48;
+      
+      const ahora = Date.now();
+      const horasTranscurridas = (ahora - ticket.fecha) / (1000 * 60 * 60);
+      const horasRestantes = limiteHoras - horasTranscurridas;
+      
+      const isResuelto = ticket.estado.toLowerCase().includes('resuelto') || 
+                         ticket.estado.toLowerCase().includes('cerrado') || 
+                         ticket.estado.toLowerCase().includes('solucionado');
+
+      let estadoSLA = 'en_tiempo'; // 'en_tiempo', 'por_vencer', 'vencido', 'resuelto'
+      let textoBadge = '';
+      let claseBadge = '';
+
+      if (isResuelto) {
+        estadoSLA = 'resuelto';
+        textoBadge = 'Completado';
+        claseBadge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      } else if (horasTranscurridas > limiteHoras) {
+        estadoSLA = 'vencido';
+        const horasExceso = Math.round(horasTranscurridas - limiteHoras);
+        textoBadge = `Vencido (+${horasExceso}h)`;
+        claseBadge = 'bg-rose-50 text-rose-700 border-rose-200 sla-vencido-pulse font-bold';
+      } else if (horasRestantes <= (limiteHoras * 0.25)) {
+        estadoSLA = 'por_vencer';
+        const horasQuedan = Math.max(1, Math.round(horasRestantes));
+        textoBadge = `Por vencer (${horasQuedan}h)`;
+        claseBadge = 'bg-amber-50 text-amber-700 border-amber-200 font-semibold';
+      } else {
+        estadoSLA = 'en_tiempo';
+        const horasQuedan = Math.round(horasRestantes);
+        textoBadge = `En tiempo (${horasQuedan}h)`;
+        claseBadge = 'bg-blue-50 text-blue-700 border-blue-200 font-medium';
+      }
+
+      return {
+        limiteHoras,
+        horasTranscurridas: Math.round(horasTranscurridas * 10) / 10,
+        horasRestantes: Math.round(horasRestantes * 10) / 10,
+        estadoSLA,
+        textoBadge,
+        claseBadge,
+        isResuelto
+      };
+    }
+
     function fetchData() {
-      document.getElementById('loading').style.display = 'flex';
-      document.getElementById('loading-text').innerText = 'Descargando información en tiempo real...';
-      google.script.run.withSuccessHandler(res => {
-        if (res.error) return alert(res.error);
-        allTickets = res.tickets;
-        applyFilter();
-      }).getDashboardData();
+      const loader = document.getElementById('loading');
+      const loaderText = document.getElementById('loading-text');
+      if (loader) loader.style.display = 'flex';
+      if (loaderText) loaderText.innerText = 'Descargando información y evidencias...';
+
+      google.script.run
+        .withSuccessHandler(res => {
+          if (loader) loader.style.display = 'none';
+          if (!res) {
+            console.error('Respuesta nula del servidor');
+            return;
+          }
+          if (res.error) {
+            console.error('Error Apps Script:', res.error);
+            alert('Aviso de la base de datos: ' + res.error);
+            return;
+          }
+          allTickets = Array.isArray(res.tickets) ? res.tickets : [];
+          applyFilter(); 
+        })
+        .withFailureHandler(err => {
+          if (loader) loader.style.display = 'none';
+          console.error('Error crítico al conectar:', err);
+          alert('Error de conexión con Google Apps Script: ' + (err.message || err));
+        })
+        .getDashboardData();
     }
 
     function applyFilter() {
       let filteredTickets = allTickets;
+      
+      // Filtro de Fecha
       if (filterStart && filterEnd) {
-        filteredTickets = allTickets.filter(t => {
+        filteredTickets = filteredTickets.filter(t => {
           const ticketDate = new Date(t.fecha);
           return ticketDate >= filterStart && ticketDate <= filterEnd;
         });
       }
-      currentDisplayedTickets = filteredTickets;
+      
+      // Filtro Cambio de Equipo
+      const filterCambio = document.getElementById('filterCambioEquipo').value;
+      if (filterCambio === 'si') {
+        filteredTickets = filteredTickets.filter(t => t.cambioEquipo === true);
+      } else if (filterCambio === 'no') {
+        filteredTickets = filteredTickets.filter(t => t.cambioEquipo === false);
+      }
+
+      // Filtro SLA
+      const filterSLAVal = document.getElementById('filterSLA').value;
+      if (filterSLAVal !== 'todos') {
+        filteredTickets = filteredTickets.filter(t => {
+          const sla = calcularSLA(t);
+          return sla.estadoSLA === filterSLAVal;
+        });
+      }
+      
+      currentDisplayedTickets = filteredTickets; 
       renderDashboard(filteredTickets);
     }
 
     function renderDashboard(tickets) {
-      setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 300);
+      setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 250);
 
       let resueltos = 0, enProceso = 0, pendientes = 0, cambiosEquipoCount = 0;
+      let criticoCount = 0, medioCount = 0, bajoCount = 0;
+      let enTiempoCount = 0, vencidosCount = 0;
       let categorias = {};
-      let tendenciasMap = new Map();
-      let sortedTickets = [...tickets].sort((a, b) => a.fecha - b.fecha);
+      let tendenciasMap = new Map(); 
+      let sortedTickets = [...tickets].sort((a,b) => a.fecha - b.fecha);
 
       let agruparPorMes = false;
       if (sortedTickets.length > 0) {
         let diasDiferencia = (new Date(sortedTickets[sortedTickets.length - 1].fecha) - new Date(sortedTickets[0].fecha)) / (1000 * 60 * 60 * 24);
-        agruparPorMes = diasDiferencia > 60;
+        agruparPorMes = diasDiferencia > 60; 
       }
 
       sortedTickets.forEach(t => {
@@ -538,21 +685,32 @@
         if (e.includes('resuelto') || e.includes('cerrado') || e.includes('solucionado')) resueltos++;
         else if (e.includes('proceso')) enProceso++;
         else pendientes++;
-
+        
         if (t.cambioEquipo) cambiosEquipoCount++;
 
+        // SLA
+        const sla = calcularSLA(t);
+        if (sla.estadoSLA === 'vencido') vencidosCount++;
+        else enTiempoCount++;
+
+        // Niveles de caso
+        let n = (t.nivelCaso || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (n === 'critico') criticoCount++;
+        else if (n === 'medio') medioCount++;
+        else bajoCount++;
+        
         categorias[t.cat] = (categorias[t.cat] || 0) + 1;
 
         let d = new Date(t.fecha);
         let etiquetaFecha = "";
-
+        
         if (agruparPorMes) {
           let str = d.toLocaleDateString('es-PE', { month: 'short', year: 'numeric' }).replace('.', '');
           etiquetaFecha = str.charAt(0).toUpperCase() + str.slice(1);
         } else {
           etiquetaFecha = d.toLocaleDateString('es-PE', { day: '2-digit', month: 'short' }).replace('.', '');
         }
-
+        
         tendenciasMap.set(etiquetaFecha, (tendenciasMap.get(etiquetaFecha) || 0) + 1);
       });
 
@@ -560,54 +718,49 @@
       let total = tickets.length;
       document.getElementById('stat-total').innerText = total;
       document.getElementById('stat-resueltos').innerText = resueltos;
-      document.getElementById('stat-efectividad').innerText = total > 0 ? Math.round((resueltos / total) * 100) + '%' : '0%';
-      document.getElementById('stat-pendientes').innerText = pendientes;
+      document.getElementById('stat-pendientes').innerText = pendientes + enProceso;
       document.getElementById('stat-cambios-equipo').innerText = cambiosEquipoCount;
+
+      // KPI Cumplimiento SLA (% en tiempo vs total)
+      let cumplimientoSlaPct = total > 0 ? Math.round(((total - vencidosCount) / total) * 100) : 100;
+      document.getElementById('stat-sla-compliance').innerText = cumplimientoSlaPct + '%';
 
       /* === GRÁFICO 1: TENDENCIA === */
       const ctxTrend = document.getElementById('trendChart').getContext('2d');
-      if (trendChart) trendChart.destroy();
-
-      // Crear gradiente para la línea
-      let gradientTrend = ctxTrend.createLinearGradient(0, 0, 0, 400);
-      gradientTrend.addColorStop(0, 'rgba(15, 23, 42, 0.2)'); // slate-900
+      if(trendChart) trendChart.destroy();
+      
+      let gradientTrend = ctxTrend.createLinearGradient(0, 0, 0, 300);
+      gradientTrend.addColorStop(0, 'rgba(15, 23, 42, 0.2)');
       gradientTrend.addColorStop(1, 'rgba(15, 23, 42, 0)');
 
       trendChart = new Chart(ctxTrend, {
         type: 'line',
         data: {
           labels: Array.from(tendenciasMap.keys()),
-          datasets: [{
+          datasets: [{ 
             label: 'Tickets',
-            data: Array.from(tendenciasMap.values()),
-            borderColor: '#0f172a', // slate-900
-            backgroundColor: gradientTrend,
-            fill: true,
-            tension: 0.4,
+            data: Array.from(tendenciasMap.values()), 
+            borderColor: '#0f172a',
+            backgroundColor: gradientTrend, 
+            fill: true, 
+            tension: 0.35, 
             borderWidth: 2.5,
             pointBackgroundColor: '#ffffff',
             pointBorderColor: '#0f172a',
             pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
+            pointRadius: 3.5,
+            pointHoverRadius: 5
           }]
         },
-        options: {
-          maintainAspectRatio: false,
-          plugins: {
+        options: { 
+          maintainAspectRatio: false, 
+          plugins: { 
             legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0f172a',
-              titleFont: { family: 'Inter', size: 13 },
-              bodyFont: { family: 'Inter', size: 13 },
-              padding: 12,
-              cornerRadius: 8,
-              displayColors: false
-            }
+            tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 8, displayColors: false }
           },
-          scales: {
-            y: { beginAtZero: true, border: { dash: [4, 4] }, ticks: { precision: 0, padding: 10 } },
-            x: { grid: { display: false }, ticks: { padding: 10 } }
+          scales: { 
+            y: { beginAtZero: true, border: { dash: [4, 4] }, ticks: { precision: 0 } },
+            x: { grid: { display: false } }
           },
           interaction: { intersect: false, mode: 'index' }
         }
@@ -618,128 +771,202 @@
       catData.sort((a, b) => b.count - a.count);
 
       const ctxBar = document.getElementById('categoryChart').getContext('2d');
-      if (barChart) barChart.destroy();
+      if(barChart) barChart.destroy();
       barChart = new Chart(ctxBar, {
         type: 'bar',
-        data: {
-          labels: catData.map(c => c.name),
-          datasets: [{
-            data: catData.map(c => c.count),
-            backgroundColor: '#3b82f6', // blue-500
-            hoverBackgroundColor: '#2563eb', // blue-600
-            borderRadius: 6,
-            maxBarThickness: 40
-          }]
+        data: { 
+          labels: catData.map(c => c.name), 
+          datasets: [{ 
+            data: catData.map(c => c.count), 
+            backgroundColor: '#3b82f6',
+            hoverBackgroundColor: '#2563eb',
+            borderRadius: 6, 
+            maxBarThickness: 35 
+          }] 
         },
-        options: {
-          indexAxis: 'y',
-          maintainAspectRatio: false,
-          plugins: {
+        options: { 
+          indexAxis: 'y', 
+          maintainAspectRatio: false, 
+          plugins: { 
             legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0f172a',
-              padding: 12,
-              cornerRadius: 8,
-              displayColors: false
-            }
+            tooltip: { backgroundColor: '#0f172a', padding: 10, cornerRadius: 8, displayColors: false }
           },
           scales: {
             x: { beginAtZero: true, border: { dash: [4, 4] } },
-            y: { grid: { display: false }, ticks: { font: { weight: '500' } } }
+            y: { grid: { display: false }, ticks: { font: { weight: '500' } } } 
           }
         }
       });
 
       /* === GRÁFICO 3: ESTADOS === */
       const ctxPie = document.getElementById('statusChart').getContext('2d');
-      if (statusChart) statusChart.destroy();
+      if(statusChart) statusChart.destroy();
       statusChart = new Chart(ctxPie, {
         type: 'doughnut',
-        data: {
-          labels: ['Resueltos', 'En Proceso', 'Pendientes'],
-          datasets: [{
-            data: [resueltos, enProceso, pendientes],
-            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+        data: { 
+          labels: ['Resueltos', 'En Proceso', 'Pendientes'], 
+          datasets: [{ 
+            data: [resueltos, enProceso, pendientes], 
+            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'], 
             borderWidth: 2,
             borderColor: '#ffffff',
             hoverOffset: 4,
-            cutout: '75%'
-          }]
+            cutout: '75%' 
+          }] 
         },
-        options: {
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyle: 'circle' } },
-            tooltip: { padding: 12, cornerRadius: 8 }
-          }
+        options: { 
+          maintainAspectRatio: false, 
+          plugins: { 
+            legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true, pointStyle: 'circle' } },
+            tooltip: { padding: 10, cornerRadius: 8 }
+          } 
         }
       });
 
-      renderTable(tickets.slice(-15).reverse());
+      /* === GRÁFICO 4: NIVEL DE CASO === */
+      const ctxNivel = document.getElementById('nivelCasoChart').getContext('2d');
+      if(nivelCasoChart) nivelCasoChart.destroy();
+      nivelCasoChart = new Chart(ctxNivel, {
+        type: 'doughnut',
+        data: { 
+          labels: ['Crítico (4h)', 'Medio (24h)', 'Bajo (48h)'], 
+          datasets: [{ 
+            data: [criticoCount, medioCount, bajoCount], 
+            backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6'], 
+            borderWidth: 2,
+            borderColor: '#ffffff',
+            hoverOffset: 4,
+            cutout: '75%' 
+          }] 
+        },
+        options: { 
+          maintainAspectRatio: false, 
+          plugins: { 
+            legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true, pointStyle: 'circle' } },
+            tooltip: { padding: 10, cornerRadius: 8 }
+          } 
+        }
+      });
+
+      renderTable(tickets.slice(-20).reverse());
     }
 
     function renderTable(ticketsArray) {
       const list = document.getElementById('ticketList');
-      if (ticketsArray.length === 0) {
-        list.innerHTML = '<tr><td colspan="7" class="text-center py-10 text-slate-400 font-medium"><div class="flex flex-col items-center justify-center"><i data-lucide="inbox" class="w-10 h-10 mb-3 text-slate-300"></i><p>No se encontraron registros</p></div></td></tr>';
-      } else {
-        list.innerHTML = ticketsArray.map(t => {
-          // ESTILOS PREMIUM PARA BADGES (Dot indicator)
-          let est = t.estado.toLowerCase();
-          let dotColor = est.includes('resuelto') ? 'bg-emerald-500' : est.includes('proceso') ? 'bg-blue-500' : 'bg-orange-500';
-          let bgColor = est.includes('resuelto') ? 'bg-emerald-50/50 text-emerald-700 border-emerald-200' : est.includes('proceso') ? 'bg-blue-50/50 text-blue-700 border-blue-200' : 'bg-orange-50/50 text-orange-700 border-orange-200';
-
-          return `
-          <tr class="hover:bg-slate-50/80 transition-colors group">
-            <td class="px-6 py-4">
-              <span class="font-bold text-slate-800">${t.id}</span>
-            </td>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs shrink-0 border border-slate-200">
-                  ${t.nombre.charAt(0).toUpperCase()}
-                </div>
-                <span class="text-slate-700 font-medium truncate max-w-[140px]" title="${t.nombre}">${t.nombre}</span>
-              </div>
-            </td>
-            <td class="px-6 py-4">
-              <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[11px] font-semibold tracking-wide whitespace-nowrap">${t.cat}</span>
-            </td>
-            <td class="px-6 py-4 text-slate-500 font-medium text-xs whitespace-nowrap">${t.tipo}</td>
-            <td class="px-6 py-4">
-              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold whitespace-nowrap ${bgColor}">
-                <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
-                ${t.estado}
-              </div>
-            </td>
-            <td class="px-6 py-4 text-slate-500 text-xs truncate max-w-[200px]" title="${t.descCorta}">
-              ${t.cambioEquipo ? '<i data-lucide="monitor-up" class="w-3 h-3 inline-block mr-1 text-rose-500" title="Cambio de equipo"></i>' : ''}
-              ${t.descCorta}
-            </td>
-            <td class="px-6 py-4 text-right">
-              <button onclick="openModal('${t.id}')" class="text-slate-400 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 outline-none" title="Ver Detalles">
-                <i data-lucide="chevron-right" class="w-5 h-5"></i>
-              </button>
-            </td>
-          </tr>`
-        }).join('');
+      if(!ticketsArray || ticketsArray.length === 0) {
+        list.innerHTML = '<tr><td colspan="8" class="text-center py-12 text-slate-400 font-medium"><div class="flex flex-col items-center justify-center"><i data-lucide="inbox" class="w-10 h-10 mb-2 text-slate-300"></i><p>No se encontraron registros</p></div></td></tr>';
+        lucide.createIcons();
+        return;
       }
+
+      list.innerHTML = ticketsArray.map(t => {
+        let est = t.estado.toLowerCase();
+        let dotColor = est.includes('resuelto') ? 'bg-emerald-500' : est.includes('proceso') ? 'bg-blue-500' : 'bg-orange-500';
+        let bgColor  = est.includes('resuelto') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : est.includes('proceso') ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-orange-50 text-orange-700 border-orange-200';
+        
+        let nivel = t.nivelCaso || 'Bajo';
+        let nivelNormalizado = nivel.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let nivelBadgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
+        
+        if (nivelNormalizado === 'critico') {
+          nivelBadgeColor = 'bg-rose-50 text-rose-700 border-rose-200 font-bold';
+        } else if (nivelNormalizado === 'medio') {
+          nivelBadgeColor = 'bg-amber-50 text-amber-700 border-amber-200 font-semibold';
+        }
+
+        // SLA
+        const sla = calcularSLA(t);
+
+        // Evidencias / Fotos de Drive
+        let evidenciaHtml = '';
+        if (t.evidencias && t.evidencias.length > 0) {
+          const firstEv = t.evidencias[0];
+          evidenciaHtml = `
+            <div class="flex items-center gap-1">
+              <button onclick="openLightbox('${firstEv.previewUrl}', '${t.id}', '${firstEv.viewUrl}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-200 transition-all font-bold text-[11px]" title="Abrir visor interactivo">
+                <i data-lucide="eye" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span>${t.evidencias.length} Foto${t.evidencias.length > 1 ? 's' : ''}</span>
+              </button>
+              <a href="${firstEv.viewUrl}" target="_blank" class="p-1 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-colors" title="Abrir en pestaña de Google Drive">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          `;
+        } else {
+          evidenciaHtml = `<span class="text-slate-300 text-[11px] font-normal italic">Sin archivos</span>`;
+        }
+
+        // Indicador de Comentarios
+        let comentariosCount = t.comentarios ? t.comentarios.length : 0;
+        let comentariosBadge = comentariosCount > 0 
+          ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] ml-1 font-semibold" title="${comentariosCount} notas en bitácora"><i data-lucide="message-square" class="w-2.5 h-2.5"></i> ${comentariosCount}</span>` 
+          : '';
+
+        return `
+        <tr class="hover:bg-slate-50/80 transition-colors group">
+          <td class="px-6 py-3.5">
+            <span class="font-extrabold text-slate-900">${t.id}</span>
+            ${comentariosBadge}
+          </td>
+          <td class="px-6 py-3.5">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs shrink-0 border border-slate-200">
+                ${t.nombre.charAt(0).toUpperCase()}
+              </div>
+              <span class="text-slate-700 font-semibold truncate max-w-[130px]" title="${t.nombre}">${t.nombre}</span>
+            </div>
+          </td>
+          <td class="px-6 py-3.5">
+            <div>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[11px] font-semibold tracking-wide">${t.cat}</span>
+              <span class="block text-slate-400 text-[10px] mt-0.5 font-medium">${t.tipo}</span>
+            </div>
+          </td>
+          <td class="px-6 py-3.5">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-bold whitespace-nowrap ${bgColor}">
+              <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
+              ${t.estado}
+            </div>
+          </td>
+          <td class="px-6 py-3.5">
+            <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[11px] whitespace-nowrap ${sla.claseBadge}">
+              <i data-lucide="timer" class="w-3 h-3"></i>
+              <span>${sla.textoBadge}</span>
+            </div>
+          </td>
+          <td class="px-6 py-3.5">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md border text-[11px] whitespace-nowrap ${nivelBadgeColor}">
+              ${nivel}
+            </span>
+          </td>
+          <td class="px-6 py-3.5">
+            ${evidenciaHtml}
+          </td>
+          <td class="px-6 py-3.5 text-right">
+            <button onclick="openModal('${t.id}')" class="text-slate-400 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-all opacity-70 group-hover:opacity-100 focus:opacity-100 outline-none" title="Ver Detalles y Acciones">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          </td>
+        </tr>`
+      }).join('');
+
       lucide.createIcons();
     }
 
     function filterTable() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       if (input === "") {
-        renderTable(currentDisplayedTickets.slice(-15).reverse());
+        renderTable(currentDisplayedTickets.slice(-20).reverse());
         return;
       }
       const filtered = currentDisplayedTickets.filter(t => {
-        return t.id.toLowerCase().includes(input) ||
-          t.nombre.toLowerCase().includes(input) ||
-          t.cat.toLowerCase().includes(input) ||
-          t.tipo.toLowerCase().includes(input) ||
-          t.descCompleta.toLowerCase().includes(input) ||
-          t.estado.toLowerCase().includes(input);
+        return t.id.toLowerCase().includes(input) || 
+               t.nombre.toLowerCase().includes(input) || 
+               t.cat.toLowerCase().includes(input) || 
+               t.tipo.toLowerCase().includes(input) || 
+               t.descCompleta.toLowerCase().includes(input) ||
+               (t.nivelCaso || '').toLowerCase().includes(input) ||
+               t.estado.toLowerCase().includes(input);
       });
       renderTable(filtered.slice(-50).reverse());
     }
@@ -749,80 +976,212 @@
         alert("No hay registros para exportar.");
         return;
       }
-
-      let csv = "ID,Fecha,Usuario,Categoría,Tipo,Estado,Descripción,Solución\n";
+      
+      let csv = "ID,Fecha,Usuario,Categoría,Tipo,Estado,Nivel de Caso,SLA Horas Transcurridas,Descripción,Solución,Evidencias\n";
       currentDisplayedTickets.forEach(t => {
         let fechaF = new Date(t.fecha).toLocaleDateString('es-PE');
         let desc = `"${t.descCompleta.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
         let sol = `"${t.solucion.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
-        csv += `${t.id},${fechaF},"${t.nombre}",${t.cat},${t.tipo},${t.estado},${desc},${sol}\n`;
+        let sla = calcularSLA(t);
+        let evid = `"${(t.evidencias || []).map(e => e.originalUrl).join(' | ')}"`;
+        csv += `${t.id},${fechaF},"${t.nombre}",${t.cat},${t.tipo},${t.estado},"${t.nivelCaso || ''}",${sla.horasTranscurridas},${desc},${sol},${evid}\n`;
       });
 
-      const blob = new Blob(["\ufeff", csv], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob(["\ufeff", csv], { type: 'text/csv;charset=utf-8;' }); 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `Soporte_IT_Export_${new Date().getTime()}.csv`;
+      link.download = `Soporte_TI_Reporte_${new Date().getTime()}.csv`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    /* === LÓGICA DEL MODAL === */
+    /* === LIGHTBOX DE IMÁGENES & DOCUMENTOS DRIVE === */
+    function openLightbox(previewUrl, ticketId, driveViewUrl) {
+      const iframe = document.getElementById('lightboxIframe');
+      iframe.src = previewUrl || driveViewUrl;
+      document.getElementById('lightboxTitle').innerText = `Visor de Evidencia - Ticket ${ticketId}`;
+      document.getElementById('lightboxDriveLink').href = driveViewUrl || previewUrl;
+      document.getElementById('lightboxModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightboxModal').classList.add('hidden');
+      document.getElementById('lightboxIframe').src = 'about:blank';
+    }
+
+    /* === LÓGICA DEL MODAL PRINCIPAL === */
     function openModal(idTicket) {
       const ticket = allTickets.find(t => t.id === idTicket);
-      if (!ticket) return;
+      if(!ticket) return;
+      
       document.getElementById('modalId').innerText = ticket.id;
       document.getElementById('modalNombre').innerText = ticket.nombre;
       document.getElementById('modalDesc').innerText = ticket.descCompleta;
-      document.getElementById('modalSolucion').value = ticket.solucion;
+      document.getElementById('modalSolucion').value = ticket.solucion || ''; 
       document.getElementById('modalCambioEquipo').checked = ticket.cambioEquipo;
+      document.getElementById('modalNuevoComentario').value = '';
 
-      // Intentamos seleccionar el equipo averiado. Si no existe, dejamos el valor por defecto.
+      // SLA Container Update
+      const sla = calcularSLA(ticket);
+      const slaCont = document.getElementById('modalSlaContainer');
+      const slaIconCont = document.getElementById('modalSlaIconContainer');
+      const slaTitle = document.getElementById('modalSlaTitle');
+      const slaBadge = document.getElementById('modalSlaBadge');
+      const slaDetails = document.getElementById('modalSlaDetails');
+
+      slaBadge.className = `inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${sla.claseBadge}`;
+      slaBadge.innerText = sla.textoBadge;
+
+      if (sla.estadoSLA === 'vencido') {
+        slaCont.className = 'p-4 rounded-xl border border-rose-200 bg-rose-50/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3';
+        slaIconCont.className = 'w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-rose-500/20';
+        slaTitle.innerText = `Tiempo límite de SLA excedido`;
+        slaDetails.innerText = `Límite: ${sla.limiteHoras}h &bull; Transcurrido: ${sla.horasTranscurridas}h`;
+      } else if (sla.estadoSLA === 'por_vencer') {
+        slaCont.className = 'p-4 rounded-xl border border-amber-200 bg-amber-50/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3';
+        slaIconCont.className = 'w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-amber-500/20';
+        slaTitle.innerText = `Próximo a alcanzar el límite de SLA`;
+        slaDetails.innerText = `Límite: ${sla.limiteHoras}h &bull; Restante: ${sla.horasRestantes}h`;
+      } else {
+        slaCont.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3';
+        slaIconCont.className = 'w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20';
+        slaTitle.innerText = `Dentro del tiempo establecido`;
+        slaDetails.innerText = `Límite: ${sla.limiteHoras}h &bull; Transcurrido: ${sla.horasTranscurridas}h`;
+      }
+
+      // Evidencias (Google Drive)
+      const evidList = document.getElementById('modalEvidenciasList');
+      const evidCount = document.getElementById('modalEvidenciasCount');
+      
+      if (ticket.evidencias && ticket.evidencias.length > 0) {
+        evidCount.innerText = `${ticket.evidencias.length} archivo(s)`;
+        evidList.innerHTML = ticket.evidencias.map((ev, idx) => `
+          <div class="border border-slate-200 rounded-xl bg-slate-50/70 p-3 flex flex-col justify-between hover:border-blue-300 transition-all shadow-sm">
+            <div class="flex items-center gap-2.5 mb-2.5">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs shrink-0">
+                <i data-lucide="image" class="w-4 h-4"></i>
+              </div>
+              <div class="overflow-hidden">
+                <p class="text-xs font-bold text-slate-800 truncate">Evidencia #${idx+1}</p>
+                <p class="text-[10px] text-slate-400">Google Drive</p>
+              </div>
+            </div>
+            <div class="flex gap-1.5 mt-1">
+              <button onclick="openLightbox('${ev.previewUrl}', '${ticket.id}', '${ev.viewUrl}')" class="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 bg-slate-900 text-white hover:bg-slate-800 rounded-lg text-[11px] font-bold shadow-sm transition-all">
+                <i data-lucide="eye" class="w-3 h-3"></i> Previa
+              </button>
+              <a href="${ev.viewUrl}" target="_blank" class="flex items-center justify-center p-1.5 bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-lg text-[11px] font-semibold border border-slate-200 transition-all" title="Abrir en pestaña de Drive">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        evidCount.innerText = '0 archivos';
+        evidList.innerHTML = `
+          <div class="col-span-full py-4 px-3 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center">
+            <p class="text-xs text-slate-400 italic">No se adjuntaron evidencias para este ticket.</p>
+          </div>
+        `;
+      }
+
+      // Bitácora / Historial de Comentarios
+      const comList = document.getElementById('modalComentariosList');
+      const comCount = document.getElementById('modalComentariosCount');
+      
+      if (ticket.comentarios && ticket.comentarios.length > 0) {
+        comCount.innerText = `${ticket.comentarios.length} comentarios`;
+        comList.innerHTML = ticket.comentarios.map(c => `
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-slate-700 flex items-center gap-1">
+                <i data-lucide="user" class="w-3 h-3 text-blue-500"></i> ${c.autor || 'Soporte TI'}
+              </span>
+              <span class="text-[10px] text-slate-400 font-medium">${c.fecha || ''}</span>
+            </div>
+            <p class="text-slate-600 leading-relaxed">${c.texto}</p>
+          </div>
+        `).join('');
+      } else {
+        comCount.innerText = '0 comentarios';
+        comList.innerHTML = `
+          <div class="py-3 px-3 bg-slate-50/50 rounded-xl border border-dashed border-slate-200 text-center">
+            <p class="text-xs text-slate-400 italic">Sin notas registradas aún.</p>
+          </div>
+        `;
+      }
+      
+      // Selectores
       const equipoSelect = document.getElementById('modalEquipoAveriado');
       let equipoEncontrado = false;
-      for (let i = 0; i < equipoSelect.options.length; i++) {
-        if (equipoSelect.options[i].value === ticket.equipoAveriado) {
-          equipoSelect.selectedIndex = i;
+      for(let i=0; i<equipoSelect.options.length; i++) {
+        if(equipoSelect.options[i].value === ticket.equipoAveriado) {
+          equipoSelect.selectedIndex = i; 
           equipoEncontrado = true;
           break;
         }
       }
-      if (!equipoEncontrado && ticket.equipoAveriado) {
-        // Si tiene un valor pero no está en la lista (e.g. es uno nuevo), lo seleccionamos como "Otro modelo..." o lo añadimos
+      if(!equipoEncontrado && ticket.equipoAveriado) {
         equipoSelect.value = "Otro modelo...";
       } else if (!ticket.equipoAveriado) {
         equipoSelect.selectedIndex = 0;
       }
-
+      
       toggleEquipoAveriado();
-
+      
       const statusSelect = document.getElementById('modalStatus');
-      for (let i = 0; i < statusSelect.options.length; i++) {
-        if (ticket.estado.toLowerCase().includes(statusSelect.options[i].value.toLowerCase())) {
+      for(let i=0; i<statusSelect.options.length; i++) {
+        if(ticket.estado.toLowerCase().includes(statusSelect.options[i].value.toLowerCase())) {
           statusSelect.selectedIndex = i; break;
         }
       }
-      toggleSolucionBox();
+      toggleSolucionBox(); 
+
+      // Nivel de Caso
+      const nivelCasoSelect = document.getElementById('modalNivelCaso');
+      const ticketNivel = ticket.nivelCaso || 'Bajo';
+      nivelCasoSelect.value = 'Bajo (SLA 48h)';
+      for(let i=0; i<nivelCasoSelect.options.length; i++) {
+        let optVal = nivelCasoSelect.options[i].value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let ticketVal = ticketNivel.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (optVal.includes(ticketVal) || ticketVal.includes(optVal)) {
+          nivelCasoSelect.selectedIndex = i;
+          break;
+        }
+      }
+
+      // Badge en Header
+      const headerBadge = document.getElementById('modalNivelHeaderBadge');
+      headerBadge.innerText = ticketNivel;
+      headerBadge.className = `px-2.5 py-0.5 rounded-full text-xs font-bold border ${
+        ticketNivel.toLowerCase().includes('critico') ? 'bg-rose-50 text-rose-700 border-rose-200' :
+        ticketNivel.toLowerCase().includes('medio') ? 'bg-amber-50 text-amber-700 border-amber-200' :
+        'bg-blue-50 text-blue-700 border-blue-200'
+      }`;
+
       document.getElementById('ticketModal').classList.remove('hidden');
+      lucide.createIcons();
     }
 
     function toggleSolucionBox() {
       const status = document.getElementById('modalStatus').value.toLowerCase();
       const solucionBox = document.getElementById('solucionContainer');
-      if (status.includes('resuelto')) solucionBox.classList.remove('hidden');
+      if(status.includes('resuelto')) solucionBox.classList.remove('hidden');
       else solucionBox.classList.add('hidden');
     }
 
     function toggleEquipoAveriado() {
       const isCambio = document.getElementById('modalCambioEquipo').checked;
       const container = document.getElementById('equipoAveriadoContainer');
-      if (isCambio) container.classList.remove('hidden');
+      if(isCambio) container.classList.remove('hidden');
       else container.classList.add('hidden');
     }
 
-    function closeModal() {
-      document.getElementById('ticketModal').classList.add('hidden');
+    function closeModal() { 
+      document.getElementById('ticketModal').classList.add('hidden'); 
     }
 
     function saveTicket() {
@@ -831,24 +1190,32 @@
       const textoSolucion = document.getElementById('modalSolucion').value;
       const isCambioEquipo = document.getElementById('modalCambioEquipo').checked;
       const equipoAveriado = isCambioEquipo ? document.getElementById('modalEquipoAveriado').value : '';
+      
+      // Limpiar el texto del nivel de caso (ej: "Crítico (SLA 4h)" -> "Crítico")
+      let nivelCaso = document.getElementById('modalNivelCaso').value;
+      if (nivelCaso.includes('(')) {
+        nivelCaso = nivelCaso.split('(')[0].trim();
+      }
+
+      const nuevoComentario = document.getElementById('modalNuevoComentario').value;
+      const autorComentario = document.getElementById('modalComentarioAutor').value || 'Cristian Apaza';
 
       closeModal();
       document.getElementById('loading').style.display = 'flex';
-      document.getElementById('loading-text').innerText = 'Sincronizando actualización...';
+      document.getElementById('loading-text').innerText = 'Guardando actualización y notificando...';
 
       google.script.run.withSuccessHandler(res => {
-        if (res.error) {
+        if(res.error) {
           alert('Error al guardar: ' + res.error);
           document.getElementById('loading').style.display = 'none';
         } else {
           document.getElementById('searchInput').value = '';
-          fetchData();
+          fetchData(); 
         }
-      }).updateTicketStatus(idTicket, nuevoEstado, textoSolucion, isCambioEquipo, equipoAveriado);
+      }).updateTicketStatus(idTicket, nuevoEstado, textoSolucion, isCambioEquipo, equipoAveriado, nivelCaso, nuevoComentario, autorComentario);
     }
 
     window.onload = fetchData;
   </script>
 </body>
-
 </html>
